@@ -11,6 +11,7 @@ class Cellar(name: String, id: String) {
         bottles.add(Bottle(name, price))
         nbBottles++
     }
+    
 
     fun addBottle(bottle: Bottle){
         bottles.add(bottle)
