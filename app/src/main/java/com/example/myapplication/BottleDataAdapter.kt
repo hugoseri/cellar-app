@@ -1,10 +1,11 @@
 package com.example.myapplication
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class BottleDataAdapter(private val cellar: Cellar) :
+class BottleDataAdapter(private val cellar: Cellar, private val deleteListener: onDeleteListener) :
     RecyclerView.Adapter<BottleDataViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BottleDataViewHolder {
@@ -18,7 +19,13 @@ class BottleDataAdapter(private val cellar: Cellar) :
 
         viewholder.bottleName.text = name
         viewholder.bottlePrice.text = price.toString()
+
+        viewholder.bottleDelete.setOnClickListener { view: View? ->
+            deleteListener.deleteBottle(position)
+        }
     }
+
+
 
     override fun getItemCount(): Int {
         return this.cellar.getNumberOfBottles()

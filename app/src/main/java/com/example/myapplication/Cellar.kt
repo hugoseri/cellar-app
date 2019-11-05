@@ -22,6 +22,11 @@ class Cellar(name: String, id: String) {
         nbBottles++
     }
 
+    fun removeBottle(index: Int){
+        bottles.removeAt(index)
+        nbBottles--
+    }
+
     fun getBottles(): List<Bottle> {
         return bottles
     }

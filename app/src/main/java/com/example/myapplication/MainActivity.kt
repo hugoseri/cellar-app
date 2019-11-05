@@ -11,10 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), onDeleteListener {
 
     private val cellar = Cellar("My Cellar", "0")
     lateinit var recyclerView: RecyclerView
+
+    override fun deleteBottle(index: Int) {
+        cellar.removeBottle(index)
+        recyclerView.adapter?.notifyDataSetChanged()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         //gestion liste bouteilles affichées
         recyclerView = findViewById<RecyclerView>(R.id.a_main_list_bottles)
-        val adapter = BottleDataAdapter(cellar)
+        val adapter = BottleDataAdapter(cellar, this)
         recyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
