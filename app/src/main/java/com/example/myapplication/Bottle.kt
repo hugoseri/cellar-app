@@ -1,3 +1,5 @@
 package com.example.myapplication
 
-data class Bottle(val name: String, val price: Int);
+import java.io.Serializable
+
+data class Bottle(val name: String, val price: Int): Serializable;
