@@ -1,30 +1,63 @@
 package com.example.myapplication
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
+import java.io.Serializable
 
 
-class MainActivity : AppCompatActivity(), onDeleteListener {
+class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInteractionListener, BottleListFragment.OnFragmentInteractionListener {
 
     private val cellar = Cellar("My Cellar", "0")
     lateinit var recyclerView: RecyclerView
 
+    lateinit var fragmentAddBottle: BottleCreationFragment
+    lateinit var fragmentListBottle: BottleListFragment
+
+    lateinit var fragmentTransaction: FragmentTransaction
+
+    override fun addBottle(bottle: Bottle) {
+        cellar.addBottleStart(bottle)
+        toastMessage("The bottle : " + cellar.getFirstBottle().name + " has been added to the cellar.")
+        fragmentListBottle.updateRecyclerView()
+    }
+
     override fun deleteBottle(index: Int) {
         cellar.removeBottle(index)
-        recyclerView.adapter?.notifyDataSetChanged()
+        toastMessage("The bottle : " + cellar.getFirstBottle().name + " has been removed from the cellar.")
+        fragmentListBottle.updateRecyclerView()
+    }
+
+    override fun goToAddBottleFragment() {
+        fragmentTransaction = supportFragmentManager.beginTransaction()
+
+        fragmentAddBottle = BottleCreationFragment()
+        fragmentTransaction.replace(R.id.a_main_rootview, fragmentAddBottle)
+
+        fragmentTransaction.commit()
+    }
+
+    override fun goToListFragment() {
+        fragmentTransaction = supportFragmentManager.beginTransaction()
+
+        val bundle = Bundle()
+        bundle.putSerializable(SEND_CELLAR_KEY, cellar.getBottles() as Serializable)
+        fragmentListBottle = BottleListFragment()
+        fragmentListBottle.arguments = bundle
+        fragmentTransaction.replace(R.id.a_main_rootview, fragmentListBottle)
+
+        fragmentTransaction.commit()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        goToListFragment()
+
+        /*
         //gestion liste bouteilles affichées
         recyclerView = findViewById<RecyclerView>(R.id.a_main_list_bottles)
         val adapter = BottleDataAdapter(cellar, this)
@@ -55,5 +88,16 @@ class MainActivity : AppCompatActivity(), onDeleteListener {
 
             recyclerView.adapter?.notifyDataSetChanged()
         }
+
+    */
+    }
+
+    fun toastMessage(message: String){
+        val toast = Toast.makeText(
+            applicationContext,
+            message,
+            Toast.LENGTH_SHORT
+        )
+        toast.show()
     }
 }
