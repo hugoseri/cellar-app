@@ -25,8 +25,9 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
     }
 
     override fun deleteBottle(index: Int) {
+        var bottleDeleted = cellar.getBottle(index).name
         cellar.removeBottle(index)
-        toastMessage("The bottle : " + cellar.getFirstBottle().name + " has been removed from the cellar.")
+        toastMessage("The bottle : $bottleDeleted has been removed from the cellar.")
         fragmentListBottle.updateRecyclerView()
     }
 

@@ -18,7 +18,7 @@ class BottleDataAdapter(private val listBottles: ArrayList<Bottle>, private val 
         val (name, price) = this.listBottles[position]
 
         viewholder.bottleName.text = name
-        viewholder.bottlePrice.text = price.toString()
+        viewholder.bottlePrice.text = price.toString() + "€"
 
         viewholder.bottleDelete.setOnClickListener { view: View? ->
             deleteListener?.deleteBottle(position)

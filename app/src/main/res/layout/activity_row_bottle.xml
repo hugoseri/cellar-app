@@ -35,6 +35,7 @@
         android:layout_width="91dp"
         android:layout_height="92dp"
         android:contentDescription="@string/bottle_icon"
+        android:padding="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bottle_icon" />
@@ -65,9 +66,12 @@
 
     <ImageButton
         android:id="@+id/a_row_bottle_delete"
-        android:layout_width="49dp"
-        android:layout_height="45dp"
-        android:background="@color/redColor"
+        android:layout_width="44dp"
+        android:layout_height="42dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="delete button"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/a_row_bottle_textview_bottle_name"
