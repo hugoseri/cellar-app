@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BottleListFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
@@ -29,7 +29,7 @@ class BottleListFragment : Fragment() {
         recyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
-        val buttonNewBottle = rootview.findViewById<Button>(R.id.a_main_btn_add_bottle)
+        val buttonNewBottle = rootview.findViewById<FloatingActionButton>(R.id.a_main_btn_add_bottle)
         buttonNewBottle.setOnClickListener{ view: View? ->
             listener?.goToAddBottleFragment()
         }

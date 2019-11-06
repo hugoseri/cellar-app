@@ -1,6 +1,9 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
@@ -31,11 +34,19 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
         fragmentListBottle.updateRecyclerView()
     }
 
+    fun deleteAllBottles(){
+        cellar.removeAllBottles()
+        toastMessage("All bottles have been removed from the cellar.")
+        fragmentListBottle.updateRecyclerView()
+    }
+
     override fun goToAddBottleFragment() {
         fragmentTransaction = supportFragmentManager.beginTransaction()
 
         fragmentAddBottle = BottleCreationFragment()
         fragmentTransaction.replace(R.id.a_main_rootview, fragmentAddBottle)
+
+        fragmentTransaction.addToBackStack("add_bottle")
 
         fragmentTransaction.commit()
     }
@@ -57,41 +68,24 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
         setContentView(R.layout.activity_main)
 
         goToListFragment()
+    }
 
-        /*
-        //gestion liste bouteilles affichées
-        recyclerView = findViewById<RecyclerView>(R.id.a_main_list_bottles)
-        val adapter = BottleDataAdapter(cellar, this)
-        recyclerView.adapter = adapter
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-        //bouton ajout bouteille
-        val btnAddBottle = findViewById<Button>(R.id.a_main_btn_add_bottle)
-        btnAddBottle.setOnClickListener { view: View? ->
-            val addBottleIntent = Intent(this, AddBottleActivity::class.java)
-            startActivityForResult(addBottleIntent, CREATE_BOTTLE_REQUEST_CODE)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.m_delete_bottles-> {
+                deleteAllBottles()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CREATE_BOTTLE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
-            val bottle: Bottle = data.getSerializableExtra(CREATE_BOTTLE_EXTRA_KEY) as Bottle
-             cellar.addBottleStart(bottle)
-
-            val toast = Toast.makeText(
-                applicationContext,
-                "The bottle : " + cellar.getFirstBottle().name + " has been added to the cellar.",
-                Toast.LENGTH_SHORT
-            )
-            toast.show()
-
-            recyclerView.adapter?.notifyDataSetChanged()
-        }
-
-    */
-    }
 
     fun toastMessage(message: String){
         val toast = Toast.makeText(
@@ -99,6 +93,7 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
             message,
             Toast.LENGTH_SHORT
         )
+        toast.setGravity(Gravity.CENTER_HORIZONTAL,0, 0)
         toast.show()
     }
 }

@@ -27,6 +27,10 @@ class Cellar(name: String, id: String) {
         nbBottles--
     }
 
+    fun removeAllBottles(){
+        bottles.clear()
+    }
+
     fun getBottles(): List<Bottle> {
         return bottles
     }
