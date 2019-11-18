@@ -20,7 +20,7 @@ class AddBottleActivity : AppCompatActivity() {
         val bottlePrice = findViewById<EditText>(R.id.a_add_bottle_text_price)
         btnAddBottle.setOnClickListener{ view: View? ->
             if (!bottleName.text.toString().isEmpty() && !bottlePrice.text.toString().isEmpty()) {
-                bottle = Bottle(bottleName.text.toString(), bottlePrice.text.toString().toInt())
+                bottle = Bottle(bottleName.text.toString(), bottlePrice.text.toString().toDouble())
                 stopActivityAndReturnResult()
             } else {
                 val toast = Toast.makeText(

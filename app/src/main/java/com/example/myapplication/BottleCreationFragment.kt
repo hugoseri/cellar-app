@@ -29,8 +29,8 @@ class BottleCreationFragment : Fragment() {
 
         btnAddBottle.setOnClickListener { view: View? ->
             if (!bottleName.text.toString().isEmpty() && !bottlePrice.text.toString().isEmpty()) {
-                bottle = Bottle(bottleName.text.toString(), bottlePrice.text.toString().toInt())
-                listener?.addBottle(bottle)
+                bottle = Bottle(bottleName.text.toString(), bottlePrice.text.toString().toDouble())
+                listener?.addBottleInAPI(bottle)
                 listener?.goToListFragment()
             } else {
                 val toast = Toast.makeText(
@@ -59,7 +59,7 @@ class BottleCreationFragment : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        fun addBottle(bottle: Bottle)
+        fun addBottleInAPI(bottle: Bottle)
         fun goToListFragment()
     }
 }

@@ -7,7 +7,7 @@ class Cellar(name: String, id: String) {
     private var bottles: ArrayList<Bottle> = arrayListOf()
 
 
-    fun addBottle(name: String, price: Int) {
+    fun addBottle(name: String, price: Double) {
         bottles.add(Bottle(name, price))
         nbBottles++
     }
@@ -51,7 +51,7 @@ class Cellar(name: String, id: String) {
     fun getBottle(name: String): Bottle {
         var i: Int = 0
         var found: Boolean = false
-        var myBottle: Bottle = Bottle("empty", 0)
+        var myBottle: Bottle = Bottle("empty", 0.0)
 
         while (i < nbBottles && !found) {
             if (bottles[i].name == name) {
@@ -68,16 +68,16 @@ class Cellar(name: String, id: String) {
         }
     }
 
-    fun getTotalPriceInEuros(): Int {
+    fun getTotalPriceInEuros(): Double {
         return computeTotalPrice()
     }
 
-    fun getTotalPriceInDollars(): Int {
+    fun getTotalPriceInDollars(): Double {
         return computeTotalPrice() * 4 / 5
     }
 
-    fun computeTotalPrice(): Int {
-        var price: Int = 0
+    fun computeTotalPrice(): Double {
+        var price: Double = 0.0
         for (bottle in bottles) {
             price += bottle.price
         }

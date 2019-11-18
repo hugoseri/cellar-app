@@ -7,36 +7,118 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.google.gson.GsonBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.Serializable
+
+
+
+
 
 
 class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInteractionListener, BottleListFragment.OnFragmentInteractionListener {
 
     private val cellar = Cellar("My Cellar", "0")
-    lateinit var recyclerView: RecyclerView
 
     lateinit var fragmentAddBottle: BottleCreationFragment
     lateinit var fragmentListBottle: BottleListFragment
 
     lateinit var fragmentTransaction: FragmentTransaction
 
-    override fun addBottle(bottle: Bottle) {
+    lateinit var requestQueue: RequestQueue
+
+    lateinit var apiCalls: APICalls
+
+    var cellarId: String = "1"
+
+    override fun addBottleInAPI(bottle: Bottle) {
+        apiCalls.addBottle(cellarId, bottle)
+            .enqueue(object : Callback<Bottle> {
+                override fun onResponse(
+                    call: Call<Bottle>,
+                    response: retrofit2.Response<Bottle>) {
+                    val bottle = response.body()
+                    toastMessage("Bottle ${bottle?.name} has been added to the API.")
+                }
+
+                override fun onFailure(call: Call<Bottle>, t: Throwable) {
+                    toastMessage("No bottle added.")
+                }
+            })
+    }
+
+    fun addBottleLocally(bottle: Bottle){
         cellar.addBottleStart(bottle)
         toastMessage("The bottle : " + cellar.getFirstBottle().name + " has been added to the cellar.")
         fragmentListBottle.updateRecyclerView()
     }
 
-    override fun deleteBottle(index: Int) {
-        var bottleDeleted = cellar.getBottle(index).name
-        cellar.removeBottle(index)
-        toastMessage("The bottle : $bottleDeleted has been removed from the cellar.")
+    fun getAPIBottlesWithVolley(cellarId: Int){
+        val stringRequest = StringRequest(
+            Request.Method.GET,
+            API_BASE_URL + "cellars/" + cellarId + "/bottles",
+            Response.Listener<String> {
+                val gson = GsonBuilder().create()
+                val bottlesFromServer = gson.fromJson<Array<Bottle>>(it, Array<Bottle>::class.java)
+
+                for (element in bottlesFromServer){
+                    addBottleInAPI(element)
+                }
+            },
+            Response.ErrorListener {
+                toastMessage("It fails with error: $it")
+            }
+        )
+
+        requestQueue.add(stringRequest)
+    }
+
+    fun getAllBottles(){
+        apiCalls.getAllBottles(cellarId)
+            .enqueue(object : Callback<ArrayList<Bottle>> {
+                override fun onResponse(
+                    call: Call<ArrayList<Bottle>>,
+                    response: retrofit2.Response<ArrayList<Bottle>>) {
+                    toastMessage("Get all bottles working.")
+                    val bottles = response.body()
+                    for (bottle in bottles.orEmpty()){
+                        addBottleLocally(bottle)
+                    }
+                }
+
+                override fun onFailure(call: Call<ArrayList<Bottle>>, t: Throwable) {
+                    toastMessage("Get all bottles not working.")
+                }
+            })
+    }
+
+
+    fun initRetrofit(){
+        val retrofit = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(API_BASE_URL)
+            .build()
+
+        apiCalls = retrofit.create<APICalls>(APICalls::class.java)
+    }
+
+    override fun deleteBottle(position: Int) {
+        var bottleDeleted = cellar.getBottle(position).name
+        cellar.removeBottle(position)
+        toastMessage("The bottle : $bottleDeleted has been removed from the cellar (only locally).")
         fragmentListBottle.updateRecyclerView()
     }
 
-    fun deleteAllBottles(){
+    private fun deleteAllBottles(){
         cellar.removeAllBottles()
-        toastMessage("All bottles have been removed from the cellar.")
+        toastMessage("All bottles have been removed from the cellar (only locally).")
         fragmentListBottle.updateRecyclerView()
     }
 
@@ -60,12 +142,18 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
         fragmentListBottle.arguments = bundle
         fragmentTransaction.replace(R.id.a_main_rootview, fragmentListBottle)
 
+        getAllBottles()
+
         fragmentTransaction.commit()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //requestQueue = Volley.newRequestQueue(this)
+
+        initRetrofit()
 
         goToListFragment()
     }
