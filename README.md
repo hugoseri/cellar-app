@@ -23,7 +23,7 @@ It adds it in the local database as well.
 
 # Interactions architecture
 <p align="center">
-  <img src="app/src/main/res/img/architecture.png" alt="App architecture" height="400"/>
+  <img src="app/src/main/res/img/architecture.jpg" alt="App architecture" height="400"/>
   <br/>
 </p>
 The app actually interacts with the [cellar-api](https://github.com/hugoseri/cellar-api).
