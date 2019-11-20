@@ -52,7 +52,7 @@ class BottleListFragment : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        fun deleteBottle(position: Int)
+        fun deleteBottleLocally(position: Int)
         fun goToAddBottleFragment()
     }
 

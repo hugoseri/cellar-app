@@ -18,11 +18,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.Serializable
 
-
-
-
-
-
 class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInteractionListener, BottleListFragment.OnFragmentInteractionListener {
 
     private val cellar = Cellar("My Cellar", "0")
@@ -35,6 +30,8 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
     lateinit var requestQueue: RequestQueue
 
     lateinit var apiCalls: APICalls
+
+    private lateinit var bottleDao: BottleDao
 
     var cellarId: String = "1"
 
@@ -49,12 +46,18 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
                 }
 
                 override fun onFailure(call: Call<Bottle>, t: Throwable) {
-                    toastMessage("No bottle added.")
+                    toastMessage("No bottle added in API.")
                 }
             })
+        addBottleInLocalDatabase(bottle)
     }
 
-    fun addBottleLocally(bottle: Bottle){
+    fun addBottleInLocalDatabase(bottle: Bottle){
+        toastMessage("Bottle added in local database.")
+        bottleDao.insertBottle(bottle)
+    }
+
+    fun addBottleInView(bottle: Bottle){
         cellar.addBottleStart(bottle)
         toastMessage("The bottle : " + cellar.getFirstBottle().name + " has been added to the cellar.")
         fragmentListBottle.updateRecyclerView()
@@ -80,7 +83,7 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
         requestQueue.add(stringRequest)
     }
 
-    fun getAllBottles(){
+    fun getAllBottlesFromAPI(){
         apiCalls.getAllBottles(cellarId)
             .enqueue(object : Callback<ArrayList<Bottle>> {
                 override fun onResponse(
@@ -89,16 +92,27 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
                     toastMessage("Get all bottles working.")
                     val bottles = response.body()
                     for (bottle in bottles.orEmpty()){
-                        addBottleLocally(bottle)
+                        addBottleInView(bottle)
+                    }
+                    if (bottles.orEmpty().isEmpty()){
+                        getAllBottlesFromLocal()
                     }
                 }
 
                 override fun onFailure(call: Call<ArrayList<Bottle>>, t: Throwable) {
-                    toastMessage("Get all bottles not working.")
+                    toastMessage("API request not working, saving locally.")
+                    getAllBottlesFromLocal()
                 }
             })
     }
 
+    fun getAllBottlesFromLocal(){
+        toastMessage("Get all local bottles.")
+        val bottles = bottleDao.getAllBottles()
+        for (bottle in bottles){
+            addBottleInView(bottle)
+        }
+    }
 
     fun initRetrofit(){
         val retrofit = Retrofit.Builder()
@@ -109,15 +123,20 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
         apiCalls = retrofit.create<APICalls>(APICalls::class.java)
     }
 
-    override fun deleteBottle(position: Int) {
-        var bottleDeleted = cellar.getBottle(position).name
+    override fun deleteBottleLocally(position: Int) {
+        val bottleDeleted = cellar.getBottle(position)
+        var bottleDeletedName = bottleDeleted.name
+
+        bottleDao.deleteBottle(bottleDeleted)
+
         cellar.removeBottle(position)
-        toastMessage("The bottle : $bottleDeleted has been removed from the cellar (only locally).")
+        toastMessage("The bottle : $bottleDeletedName has been removed from the cellar (only locally).")
         fragmentListBottle.updateRecyclerView()
     }
 
-    private fun deleteAllBottles(){
+    private fun deleteAllBottlesLocally(){
         cellar.removeAllBottles()
+        bottleDao.deleteBottle(*cellar.getBottles().toTypedArray())
         toastMessage("All bottles have been removed from the cellar (only locally).")
         fragmentListBottle.updateRecyclerView()
     }
@@ -142,7 +161,7 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
         fragmentListBottle.arguments = bundle
         fragmentTransaction.replace(R.id.a_main_rootview, fragmentListBottle)
 
-        getAllBottles()
+        getAllBottlesFromAPI()
 
         fragmentTransaction.commit()
     }
@@ -152,6 +171,8 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
         setContentView(R.layout.activity_main)
 
         //requestQueue = Volley.newRequestQueue(this)
+
+        bottleDao = AppDatabase.getAppDatabase(this).getBottleDao()
 
         initRetrofit()
 
@@ -167,7 +188,7 @@ class MainActivity : AppCompatActivity(), BottleCreationFragment.OnFragmentInter
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.m_delete_bottles-> {
-                deleteAllBottles()
+                deleteAllBottlesLocally()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

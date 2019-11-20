@@ -21,7 +21,7 @@ class BottleDataAdapter(private val listBottles: ArrayList<Bottle>, private val 
         viewholder.bottlePrice.text = price.toString() + "€"
 
         viewholder.bottleDelete.setOnClickListener { view: View? ->
-            deleteListener?.deleteBottle(position)
+            deleteListener?.deleteBottleLocally(position)
         }
     }
 
