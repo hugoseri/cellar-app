@@ -26,5 +26,6 @@ It adds it in the local database as well.
   <img src="app/src/main/res/img/architecture.jpg" alt="App architecture"/>
   <br/>
 </p>
+
 The app actually interacts with the [cellar-api](https://github.com/hugoseri/cellar-api).
 It also uses a local database using [Room](https://developer.android.com/jetpack/androidx/releases/room).
