@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BottleListFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/a_main_list_bottles"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="250dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/activity_row_bottle" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/a_main_btn_add_bottle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="fitXY"
+        app:backgroundTint="@color/darkBlueColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="@+id/a_main_list_bottles"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976"
+        app:srcCompat="@drawable/add_icon" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/f_cellar_image"
+        android:layout_width="409dp"
+        android:layout_height="248dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/darkBlueColor"
+        app:layout_constraintBottom_toTopOf="@+id/a_main_list_bottles"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/f_bottle_list_app_description_image"
+            android:layout_width="227dp"
+            android:layout_height="91dp"
+            android:contentDescription="Bottle image"
+            android:src="@drawable/bottle_colored_white"
+            app:layout_constraintBottom_toTopOf="@+id/f_bottle_list_app_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/f_bottle_list_app_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My cellar"
+            android:textColor="#ffffff"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/f_bottle_list_app_description_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

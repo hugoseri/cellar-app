@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class BottleDataAdapter(private val cellar: Cellar, private val deleteListener: onDeleteListener) :
+class BottleDataAdapter(private val listBottles: ArrayList<Bottle>, private val deleteListener: BottleListFragment.OnFragmentInteractionListener?) :
     RecyclerView.Adapter<BottleDataViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BottleDataViewHolder {
@@ -15,19 +15,18 @@ class BottleDataAdapter(private val cellar: Cellar, private val deleteListener: 
     }
 
     override fun onBindViewHolder(viewholder: BottleDataViewHolder, position: Int) {
-        val (name, price) = this.cellar.getBottle(position)
+        val (name, price) = this.listBottles[position]
 
         viewholder.bottleName.text = name
-        viewholder.bottlePrice.text = price.toString()
+        viewholder.bottlePrice.text = price.toString() + "€"
 
         viewholder.bottleDelete.setOnClickListener { view: View? ->
-            deleteListener.deleteBottle(position)
+            deleteListener?.deleteBottle(position)
         }
     }
 
 
-
     override fun getItemCount(): Int {
-        return this.cellar.getNumberOfBottles()
+        return this.listBottles.size
     }
 }

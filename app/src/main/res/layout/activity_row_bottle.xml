@@ -27,6 +27,7 @@
         android:paddingRight="20dp"
         android:text="@string/a_row_bottle_textview_bottle_price"
         android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/a_row_bottle_delete"
         app:layout_constraintStart_toEndOf="@+id/a_row_bottle_textview_bottle_price_descr"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,9 +36,10 @@
         android:layout_width="91dp"
         android:layout_height="92dp"
         android:contentDescription="@string/bottle_icon"
+        android:padding="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/bottle_icon" />
+        app:srcCompat="@drawable/bottle_colored_blue" />
 
     <TextView
         android:id="@+id/a_row_bottle_textview_bottle_name"
@@ -48,6 +50,7 @@
         android:paddingRight="20dp"
         android:text="@string/a_row_bottle_textview_bottle_name"
         android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/a_row_bottle_delete"
         app:layout_constraintStart_toEndOf="@+id/a_row_bottle_textview_bottle_name_descr"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,12 +68,18 @@
 
     <ImageButton
         android:id="@+id/a_row_bottle_delete"
-        android:layout_width="49dp"
-        android:layout_height="45dp"
-        android:background="@color/redColor"
+        android:layout_width="44dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="delete button"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/a_row_bottle_textview_bottle_name"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/a_row_bottle_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/delete_bottle" />
 

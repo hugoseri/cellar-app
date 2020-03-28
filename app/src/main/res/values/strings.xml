@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Cellar manager</string>
     <string name="add_a_bottle">Add a bottle</string>
     <string name="add_image">add_image</string>
     <string name="a_add_bottle_button">Add</string>
@@ -16,5 +16,9 @@
     <string name="a_row_bottle_textview_bottle_name">Bottle name</string>
     <string name="a_row_bottle_textview_bottle_price_descr">Price :</string>
     <string name="a_row_bottle_textview_bottle_price">Bottle price</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_all_bottles">Delete all bottles</string>
 
 </resources>

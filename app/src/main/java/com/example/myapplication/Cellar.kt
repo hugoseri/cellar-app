@@ -11,7 +11,6 @@ class Cellar(name: String, id: String) {
         bottles.add(Bottle(name, price))
         nbBottles++
     }
-    
 
     fun addBottle(bottle: Bottle){
         bottles.add(bottle)
@@ -26,6 +25,10 @@ class Cellar(name: String, id: String) {
     fun removeBottle(index: Int){
         bottles.removeAt(index)
         nbBottles--
+    }
+
+    fun removeAllBottles(){
+        bottles.clear()
     }
 
     fun getBottles(): List<Bottle> {
